@@ -1,0 +1,12 @@
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+imatge = cv2.imread("/content/PXL_20210921_094959264_tallada.jpg")
+
+def imatge_binaritzada(imatge):
+  imatge = cv2.cvtColor(imatge, cv2.COLOR_BGR2GRAY) 
+  _, imatge_otsu = cv2.threshold(imatge, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+  plt.imshow(imatge_otsu, cmap='gray')
+  plt.show()
+  return imatge_otsu
