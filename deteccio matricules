@@ -11,11 +11,11 @@ def imatge_binaritzada(imatge):
   return imatge_otsu
 
 def contorns(imatge, imatge_binaria):
-  imatge_invertida = cv2.bitwise_not(imatge_binaria) # inverteix els bits negres a blancs i viceversa per 
+  imatge_invertida = cv2.bitwise_not(imatge_binaria) # inverteix els bits negres a blancs i viceversa per
   contorns, _ = cv2.findContours(imatge_invertida, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-  imagen_contornos = imatge.copy()
-  cv2.drawContours(imagen_contornos, contornos, -1, (0, 255, 0), 2)
-  plt.imshow(cv2.cvtColor(imagen_contornos, cv2.COLOR_BGR2RGB))
+  imatge_contorns = imatge.copy()
+  cv2.drawContours(imatge_contorns, contorns, -1, (0, 255, 0), 2)
+  plt.imshow(imatge_contorns)
   plt.title('Contorns')
   plt.show()
   return contorns
