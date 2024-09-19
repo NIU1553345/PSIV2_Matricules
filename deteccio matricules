@@ -3,28 +3,55 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def imatge_binaritzada(imatge):
-  imatge = cv2.cvtColor(imatge, cv2.COLOR_BGR2GRAY) 
-  _, imatge_otsu = cv2.threshold(imatge, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-  plt.imshow(imatge_otsu, cmap='gray')
-  plt.title('Imatge binària')
-  plt.show()
-  return imatge_otsu
+    imatge = cv2.cvtColor(imatge, cv2.COLOR_BGR2GRAY)
+    _, imatge_otsu = cv2.threshold(imatge, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    plt.imshow(imatge_otsu, cmap='gray')
+    plt.title('Imatge binària')
+    plt.show()
+    return imatge_otsu
 
-def contorns(imatge, imatge_binaria):
-  imatge_invertida = cv2.bitwise_not(imatge_binaria) # inverteix els bits negres a blancs i viceversa per
-  contorns, _ = cv2.findContours(imatge_invertida, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-  imatge_contorns = imatge.copy()
-  cv2.drawContours(imatge_contorns, contorns, -1, (0, 255, 0), 2)
-  plt.imshow(imatge_contorns)
-  plt.title('Contorns')
-  plt.show()
-  return contorns
+def detectar_contorns(imatge_binaria):
+    contornos, _ = cv2.findContours(imatge_binaria, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    imatge_contorns = cv2.cvtColor(imatge_binaria, cv2.COLOR_GRAY2BGR)
+    cv2.drawContours(imatge_contorns, contornos, -1, (0, 255, 0), 2)
+    plt.imshow(imatge_contorns)
+    plt.title('Tots els contorns detectats')
+    plt.show()
+    
+    return contornos
+
+def retallar_contorn_matricula(imatge, contorns):
+    contorn_matricula = None
+    max_area = 0
+    
+    for contorn in contorns:
+        x, y, w, h = cv2.boundingRect(contorn)
+        area = w * h
+        
+        # Proporció Amplada x Alçada per poder filtrar els contorns que no siguin rectangulars
+        aspect_ratio = float(w) / h
+        
+        # Filtrar contorns que tinguin entre 2 i 6 de aspect ratio ( mides arbitraries ) i que tinguin l'area més gran	
+        if 2 < aspect_ratio < 6 and area > max_area:
+            contorn_matricula = contorn
+            max_area = area
+    
+    imatge_resultat = imatge.copy()
+    cv2.drawContours(imatge_resultat, [contorn_matricula], -1, (0, 255, 0), 2)
+    
+    plt.imshow(cv2.cvtColor(imatge_resultat, cv2.COLOR_BGR2RGB))
+    plt.title('Contorn de la matrícula')
+    plt.show()
+
+    return contorn_matricula
 
 
 
-imatge = cv2.imread("/content/PXL_20210921_094959264_tallada.jpg")
+imatge = cv2.imread("C:/Users/arnau/Desktop/4t Eng/1r Semestre/PSIV 2/Reptes/Matricules/matricules_tallades/matricules_tallades/PXL_20210921_095212294_tallada.jpg")
+print(imatge.shape) # controla que la imatge s'hagui carregat correctament
 imatge_binaria = imatge_binaritzada(imatge)
-contorn  = contorns(imatge, imatge_binaria)
+contorns = detectar_contorns(imatge_binaria)
+contorn_matricula = retallar_contorn_matricula(imatge, contorns)
 
 
 
