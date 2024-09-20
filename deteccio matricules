@@ -55,6 +55,18 @@ def retallar_matricula(imatge, contorn_matricula):
     
     return matricula
 
+def eliminar_soroll(imatge,contorns):  
+    min_area = 400  
+    max_area = 18000  
+    altura_imatge, base_imatge = imatge.shape[:2]
+    contorn_filtrat = []
+    for contorn in contorns:
+        x, y, w, h = cv2.boundingRect(contorn)
+        area = cv2.contourArea(contorn)
+        if min_area < area < max_area and x > 20 and x + w < base_imatge - 20 and y > 20 and y + h < altura_imatge - 20 and h>w:
+            contorn_filtrat.append(contorn)
+    return contorn_filtrat
+
 def segmentar_matricula(matricula):
     matricula_gris = cv2.cvtColor(matricula, cv2.COLOR_BGR2GRAY)
     _, matricula_binaria = cv2.threshold(matricula_gris, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
@@ -67,40 +79,26 @@ def segmentar_matricula(matricula):
     # Ordenar els contorns de esquerra a dreta
     contorns = sorted(contorns, key=lambda contorn: cv2.boundingRect(contorn)[0])
     
+    contorns= eliminar_soroll(matricula, contorns)
     # Crear una imatge per cada lletra o número
     for i, contorn in enumerate(contorns):
         x, y, w, h = cv2.boundingRect(contorn)
         lletra = matricula[y:y+h, x:x+w]
         plt.imshow(cv2.cvtColor(lletra, cv2.COLOR_BGR2RGB))
         plt.title(f'Lletra {i+1}')
+        plt.axis('off')
         plt.show()
+        # cv2.imshow(f'Lletra {i+1}',cv2.cvtColor(lletra, cv2.COLOR_BGR2RGB))
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
 
+    
 
-def eliminar_soroll(contorns, imatge):  
-  min_area = 400  
-  max_area = 15000  
-  altura_imatge, base_imatge = imatge.shape[:2]
-  contorn_filtrat = []
-  for contorn in contorn:
-      x, y, w, h = cv2.boundingRect(contorn)
-      area = cv2.contourArea(contorn)
-      if min_area < area < max_area and x > 10 and x + w < base_imatge - 10 and y > 10 and y + h < altura_imatge - 10 and h > w:
-              contorn_filtrat.append(contorn)
-  return contorn_filtrat
-
-
-
-
-
-
-
-
-
-
-imatge = cv2.imread("C:/Users/arnau/Desktop/4t Eng/1r Semestre/PSIV 2/Reptes/Matricules/matricules_tallades/matricules_tallades/PXL_20210921_094926329_tallada.jpg")
-print(imatge.shape) # controla que la imatge s'hagui carregat correctament
+imatge = cv2.imread(r"C:\Users\Usuario\OneDrive\Escriptori\UAB\4t\psiv\matricules_tallades/PXL_20210921_094926329_tallada.jpg")
 imatge_binaria = imatge_binaritzada(imatge)
 contorns = detectar_contorns(imatge_binaria)
 contorn_matricula = retallar_contorn_matricula(imatge, contorns)
 matricula = retallar_matricula(imatge, contorn_matricula)
 matricula_segmentada = segmentar_matricula(matricula)
+
+
