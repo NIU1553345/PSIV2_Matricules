@@ -45,36 +45,46 @@ def retallar_contorn_matricula(imatge, contorns):
 
     return contorn_matricula
 
+def retallar_matricula(imatge, contorn_matricula):
+    x, y, w, h = cv2.boundingRect(contorn_matricula)
+    matricula = imatge[y:y+h, x:x+w]
+    
+    plt.imshow(cv2.cvtColor(matricula, cv2.COLOR_BGR2RGB))
+    plt.title('Matrícula')
+    plt.show()
+    
+    return matricula
+
+def segmentar_matricula(matricula):
+    matricula_gris = cv2.cvtColor(matricula, cv2.COLOR_BGR2GRAY)
+    _, matricula_binaria = cv2.threshold(matricula_gris, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    matricula_binaria = cv2.bitwise_not(matricula_binaria)
+    contorns, _ = cv2.findContours(matricula_binaria, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    # Descarta els contorns menors de 400 píxels
+    contorns = [contorn for contorn in contorns if cv2.contourArea(contorn) > 400]
+
+    # Ordenar els contorns de esquerra a dreta
+    contorns = sorted(contorns, key=lambda contorn: cv2.boundingRect(contorn)[0])
+    
+    # Crear una imatge per cada lletra o número
+    for i, contorn in enumerate(contorns):
+        x, y, w, h = cv2.boundingRect(contorn)
+        lletra = matricula[y:y+h, x:x+w]
+        plt.imshow(cv2.cvtColor(lletra, cv2.COLOR_BGR2RGB))
+        plt.title(f'Lletra {i+1}')
+        plt.show()
 
 
-imatge = cv2.imread("C:/Users/arnau/Desktop/4t Eng/1r Semestre/PSIV 2/Reptes/Matricules/matricules_tallades/matricules_tallades/PXL_20210921_095212294_tallada.jpg")
+
+
+
+
+
+imatge = cv2.imread("C:/Users/arnau/Desktop/4t Eng/1r Semestre/PSIV 2/Reptes/Matricules/matricules_tallades/matricules_tallades/PXL_20210921_094926329_tallada.jpg")
 print(imatge.shape) # controla que la imatge s'hagui carregat correctament
 imatge_binaria = imatge_binaritzada(imatge)
 contorns = detectar_contorns(imatge_binaria)
 contorn_matricula = retallar_contorn_matricula(imatge, contorns)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+matricula = retallar_matricula(imatge, contorn_matricula)
+matricula_segmentada = segmentar_matricula(matricula)
