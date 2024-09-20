@@ -76,6 +76,22 @@ def segmentar_matricula(matricula):
         plt.show()
 
 
+def eliminar_soroll(contorns):  
+  min_area = 400  
+  max_area = 15000  
+  altura_imatge, base_imatge = imatge.shape[:2]
+  contorn_filtrat = []
+  for contorn in contorn:
+      x, y, w, h = cv2.boundingRect(contorn)
+      area = cv2.contourArea(contorn)
+      if min_area < area < max_area and x > 10 and x + w < base_imatge - 10 and y > 10 and y + h < altura_imatge - 10:
+              contorn_filtrat.append(contorn)
+  return contorn_filtrat
+
+
+
+
+
 
 
 
