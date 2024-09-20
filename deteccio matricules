@@ -57,7 +57,7 @@ def retallar_matricula(imatge, contorn_matricula):
 
 def eliminar_soroll(imatge,contorns):  
     min_area = 400  
-    max_area = 18000  
+    max_area = 20000  
     altura_imatge, base_imatge = imatge.shape[:2]
     contorn_filtrat = []
     for contorn in contorns:
