@@ -76,7 +76,7 @@ def segmentar_matricula(matricula):
         plt.show()
 
 
-def eliminar_soroll(contorns):  
+def eliminar_soroll(contorns, imatge):  
   min_area = 400  
   max_area = 15000  
   altura_imatge, base_imatge = imatge.shape[:2]
