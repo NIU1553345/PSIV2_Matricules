@@ -1,3 +1,4 @@
+
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
@@ -55,16 +56,29 @@ def retallar_matricula(imatge, contorn_matricula):
     
     return matricula
 
-def eliminar_soroll(imatge,contorns):  
+def calcular_lluminositat(img):
+    hls_img = cv2.cvtColor(img, cv2.COLOR_BGR2HLS)
+    lluminositat = np.mean(hls_img[:, :, 1])  # Canal L
+    return lluminositat
+
+def eliminar_soroll(imatge,contorns):
+    ll=[]
     min_area = 400  
     max_area = 20000  
     altura_imatge, base_imatge = imatge.shape[:2]
     contorn_filtrat = []
     for contorn in contorns:
         x, y, w, h = cv2.boundingRect(contorn)
+        lletra = matricula[y:y+h, x:x+w]
         area = cv2.contourArea(contorn)
+        l=calcular_lluminositat(lletra)
+        
         if min_area < area < max_area and x > 20 and x + w < base_imatge - 20 and y > 20 and y + h < altura_imatge - 20 and h>w:
             contorn_filtrat.append(contorn)
+            ll.append(l)
+    if len(contorn_filtrat)>7:
+      pos= ll.index(min(ll))  
+      del contorn_filtrat[pos]
     return contorn_filtrat
 
 def segmentar_matricula(matricula):
@@ -94,7 +108,11 @@ def segmentar_matricula(matricula):
 
     
 
-imatge = cv2.imread(r"C:\Users\Usuario\OneDrive\Escriptori\UAB\4t\psiv\matricules_tallades/PXL_20210921_094926329_tallada.jpg")
+imatge = cv2.imread(r"C:\Users\Usuario\OneDrive\Escriptori\UAB\4t\psiv\matricules_tallades/PXL_20210921_095129495_tallada.jpg")
+plt.imshow(imatge)
+plt.title('a')
+plt.axis('off')
+plt.show()
 imatge_binaria = imatge_binaritzada(imatge)
 contorns = detectar_contorns(imatge_binaria)
 contorn_matricula = retallar_contorn_matricula(imatge, contorns)
