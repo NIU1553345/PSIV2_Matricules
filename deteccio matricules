@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def imatge_binaritzada(imatge):
-    imatge = cv2.cvtColor(imatge, cv2.COLOR_BGR2HSV)
+    imatge = cv2.cvtColor(imatge, cv2.COLOR_BGR2GRAY)
     _, imatge_otsu = cv2.threshold(imatge, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     plt.imshow(imatge_otsu, cmap='gray')
     plt.title('Imatge binària')
