@@ -1,4 +1,3 @@
-
 import os
 import numpy as np
 import tensorflow as tf
@@ -8,8 +7,9 @@ from sklearn.metrics import accuracy_score
 from tensorflow.keras.preprocessing import image
 import joblib
 
-data_dir = r'C:\Users\Usuario\OneDrive\Escriptori\UAB\4t\psiv\datasetaina'
+#Hem creat un model per el dataset de números, un altre per el dataset de lletres i un general.
 
+data_dir = r'C:\Users\Usuario\OneDrive\Escriptori\UAB\4t\psiv\datasetaina'
 img_size = (128, 64)
 
 def load_images_and_labels(data_dir, img_size):
@@ -27,17 +27,13 @@ def load_images_and_labels(data_dir, img_size):
                 labels.append(label)  
     return np.array(images), np.array(labels)
 
+
 X, y = load_images_and_labels(data_dir, img_size)
-
 X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=123)
-
 svm_model = SVC(kernel='linear') 
 svm_model.fit(X_train, y_train)
-
 y_pred = svm_model.predict(X_val)
-
 accuracy = accuracy_score(y_val, y_pred)
 print(f'Precisió en el conjunt de validació: {accuracy * 100:.2f}%')
-
 joblib.dump(svm_model, 'svm_model_general.pkl')
 print("Model guardat amb èxit!")
