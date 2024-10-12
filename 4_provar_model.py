@@ -133,7 +133,7 @@ def llegir_matricula(contorns):
         ll=['B','C','D','F','G','H','J','K','L','M','N','P','R','S','T','V','W','X','Y','Z']
         resultat.append(ll[predicted_letter])
     print(f"El resultat és: {''.join(resultat)}")
-    
+    return resultat
 
 
 #Hem provat per tots els models CNN, SVM i KNN
@@ -159,12 +159,23 @@ pred_general = []
 path = r"C:\Users\Usuario\OneDrive\Escriptori\UAB\4t\psiv\matricules_tallades"
 for fitxer in os.listdir(path):
     if fitxer.endswith(('.png', '.jpg', '.jpeg')):
-        imatge_path = os.path.join(path, fitxer)        
+        caracters = os.path.splitext(fitxer)[0]
+        real_num.extend([num for num in caracters[:4]])
+        real_lletres.extend([lletra for lletra in caracters[-3:]])
+        real_general.extend([car for car in caracters])
+        
+        imatge_path = os.path.join(path, fitxer)
         imatge = cv2.imread(imatge_path)
         imatge_binaria = imatge_binaritzada(imatge)
         contorns = detectar_contorns(imatge_binaria)
         contorn_matricula = retallar_contorn_matricula(imatge, contorns)
         matricula = retallar_matricula(imatge, contorn_matricula)
         matricula_segmentada = segmentar_matricula(matricula)
-        llegir_matricula(matricula_segmentada)
+        resultat_separat = llegir_matricula(matricula_segmentada)
+        resultat_general = 
+        
+        real_num.extend([num for num in resultat_separat[:4]])
+        real_lletres.extend([lletra for lletra in resultat_separat[-3:]])
+        real_general.extend([car for car in resultat_general])
+            
 
