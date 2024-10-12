@@ -135,6 +135,7 @@ def llegir_matricula(contorns):
     print(f"El resultat és: {''.join(resultat)}")
     
 
+
 #Hem provat per tots els models CNN, SVM i KNN
 model_ll = load_model('model_CNN_lletres.h5')
 model_n = load_model('model_CNN_num.h5')
@@ -148,17 +149,17 @@ model_general = load_model('model_CNN_general.h5')
 # model_n = load_model('model_KNN_num.h5')
 # model_general = load_model('model_KNN_general.h5')
 
-pred_lletres = []
-pred_num = []
-pred_general = []
-real_lletres = []
 real_num = []
+real_lletres = []
 real_general = []
+pred_num = []
+pred_lletres = []
+pred_general = []
 
 path = r"C:\Users\Usuario\OneDrive\Escriptori\UAB\4t\psiv\matricules_tallades"
 for fitxer in os.listdir(path):
     if fitxer.endswith(('.png', '.jpg', '.jpeg')):
-        imatge_path = os.path.join(path, imatge_path)        
+        imatge_path = os.path.join(path, fitxer)        
         imatge = cv2.imread(imatge_path)
         imatge_binaria = imatge_binaritzada(imatge)
         contorns = detectar_contorns(imatge_binaria)
