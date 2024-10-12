@@ -110,7 +110,7 @@ def llegir_matriculacnn(contorns, model, model_n, model_ll):
         prediccion_numero = model_n.predict(img_array)
         predicted_number = np.argmax(prediccion_numero, axis=1)[0]  # Clase predicha
         resultat1.append(str(predicted_number))
-   for i, contorn in enumerate(lletres):
+    for i, contorn in enumerate(lletres):
         x, y, w, h = cv2.boundingRect(contorn)
         lletra = matricula[y:y+h, x:x+w]
         cv2.imwrite('templl.jpg', lletra)
@@ -143,7 +143,7 @@ def matriu_confusio(real, pred, titol):
     matriu = confusion_matrix(real, pred)
     plt.figure(figsize=(8, 6))
     sns.heatmap(matriu, annot=True, fmt='d', cmap='Blues', cbar=False)
-        plt.title(f"Matriu de confusió - {titol}")
+    plt.title(f"Matriu de confusió - {titol}")
     plt.xlabel('Predició')
     plt.ylabel('Real')
     plt.show()
