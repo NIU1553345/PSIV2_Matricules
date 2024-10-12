@@ -1,5 +1,3 @@
-
-
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
@@ -111,7 +109,7 @@ def llegir_matricula(contorns):
         # l=predict_letter('temp.jpg', model)
         img = tf.keras.preprocessing.image.load_img('tempn.jpg', target_size=(128, 64))
         img_array = tf.keras.preprocessing.image.img_to_array(img)
-        img_array = tf.expand_dims(img_array, 0)  # Crear un lote con una sola imagen
+        img_array = tf.expand_dims(img_array, 0) 
         predictions = model_n.predict(img_array)
         predicted_n = tf.argmax(predictions[0]).numpy()
         # cv2.imshow(f'Lletra {i+1}',cv2.cvtColor(lletra, cv2.COLOR_BGR2RGB))
@@ -129,7 +127,7 @@ def llegir_matricula(contorns):
         #l=predict_letter('temp.jpg', model)
         img = tf.keras.preprocessing.image.load_img('templl.jpg', target_size=(128, 64))
         img_array = tf.keras.preprocessing.image.img_to_array(img)
-        img_array = tf.expand_dims(img_array, 0)  # Crear un lote con una sola imagen
+        img_array = tf.expand_dims(img_array, 0)  
         predictions = model_ll.predict(img_array)
         predicted_letter = tf.argmax(predictions[0]).numpy() 
         ll=['B','C','D','F','G','H','J','K','L','M','N','P','R','S','T','V','W','X','Y','Z']
@@ -137,15 +135,35 @@ def llegir_matricula(contorns):
     print(f"El resultat és: {''.join(resultat)}")
     
 
+#Hem provat per tots els models CNN, SVM i KNN
+model_ll = load_model('model_CNN_lletres.h5')
+model_n = load_model('model_CNN_num.h5')
+model_general = load_model('model_CNN_general.h5')
 
-model_ll = load_model('model_ll6.h5')
-model_n = load_model('model_n6.h5')
-imatge = cv2.imread(r"C:\Users\Usuario\OneDrive\Escriptori\UAB\4t\psiv\matricules_tallades/PXL_20210921_094951899_tallada.jpg")
-imatge_binaria = imatge_binaritzada(imatge)
-contorns = detectar_contorns(imatge_binaria)
-contorn_matricula = retallar_contorn_matricula(imatge, contorns)
-matricula = retallar_matricula(imatge, contorn_matricula)
-matricula_segmentada = segmentar_matricula(matricula)
-llegir_matricula(matricula_segmentada)
+# model_ll = load_model('model_SVM_lletres.h5')
+# model_n = load_model('model_SVM_num.h5')
+# model_general = load_model('model_SVM_general.h5')
 
+# model_ll = load_model('model_KNN_lletres.h5')
+# model_n = load_model('model_KNN_num.h5')
+# model_general = load_model('model_KNN_general.h5')
+
+pred_lletres = []
+pred_num = []
+pred_general = []
+real_lletres = []
+real_num = []
+real_general = []
+
+path = r"C:\Users\Usuario\OneDrive\Escriptori\UAB\4t\psiv\matricules_tallades"
+for fitxer in os.listdir(path):
+    if fitxer.endswith(('.png', '.jpg', '.jpeg')):
+        imatge_path = os.path.join(path, imatge_path)        
+        imatge = cv2.imread(imatge_path)
+        imatge_binaria = imatge_binaritzada(imatge)
+        contorns = detectar_contorns(imatge_binaria)
+        contorn_matricula = retallar_contorn_matricula(imatge, contorns)
+        matricula = retallar_matricula(imatge, contorn_matricula)
+        matricula_segmentada = segmentar_matricula(matricula)
+        llegir_matricula(matricula_segmentada)
 
