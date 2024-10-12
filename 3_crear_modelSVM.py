@@ -3,7 +3,7 @@ import numpy as np
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, precision_score
 from tensorflow.keras.preprocessing import image
 import joblib
 
@@ -35,5 +35,8 @@ svm_model.fit(X_train, y_train)
 y_pred = svm_model.predict(X_val)
 accuracy = accuracy_score(y_val, y_pred)
 print(f'Precisió en el conjunt de validació: {accuracy * 100:.2f}%')
+# Calcular la precisió per classe
+precision = precision_score(y_val, y_pred, average='weighted') 
+print(f'Precisió global (precision): {precision * 100:.2f}%')
 joblib.dump(svm_model, 'model_SVM_general.pkl')
 print("Model guardat amb èxit!")
