@@ -176,7 +176,7 @@ for fitxer in os.listdir(path):
         contorn_matricula = retallar_contorn_matricula(imatge, contorns)
         matricula = retallar_matricula(imatge, contorn_matricula)
         matricula_segmentada = segmentar_matricula(matricula)
-        resultat_separat, resultat_general = llegir_matricula_separat(matricula_segmentada, model_general, model_n, model_ll):)
+        resultat_separat, resultat_general = llegir_matricula_separat(matricula_segmentada, model_general, model_n, model_ll)
         
         real_num.extend(resultat_separat[:4])
         real_lletres.extend(resultat_separat[-3:])
