@@ -95,51 +95,48 @@ def segmentar_matricula(matricula):
     return contorns
 
 
-def llegir_matricula_separat(contorns):
-    resultat=[]
-    numeros=contorns[:4]
-    lletres=contorns[-3:]
+def llegir_matriculacnn(contorns, model, model_n, model_ll):
+    resultat1 = []
+    resultat2 = []
+    numeros = contorns[:4]
+    lletres = contorns[-3:]
     for i, contorn in enumerate(numeros):
         x, y, w, h = cv2.boundingRect(contorn)
         numero = matricula[y:y+h, x:x+w]
-        plt.imshow(cv2.cvtColor(numero, cv2.COLOR_BGR2RGB))
-        plt.title(f'Numero {i+1}')
-        plt.axis('off')
-        plt.show()
         cv2.imwrite('tempn.jpg', numero)
-        # l=predict_letter('temp.jpg', model)
         img = tf.keras.preprocessing.image.load_img('tempn.jpg', target_size=(128, 64))
         img_array = tf.keras.preprocessing.image.img_to_array(img)
-        img_array = tf.expand_dims(img_array, 0) 
-        predictions = model_n.predict(img_array)
-        predicted_n = tf.argmax(predictions[0]).numpy()
-        # cv2.imshow(f'Lletra {i+1}',cv2.cvtColor(lletra, cv2.COLOR_BGR2RGB))
-        # cv2.waitKey(0)
-        # cv2.destroyAllWindows() 
-        resultat.append(str(predicted_n))
-    for i, contorn in enumerate(lletres):
+        img_array = np.expand_dims(img_array, axis=0)  # Expandir a batch size 1
+        prediccion_numero = model_n.predict(img_array)
+        predicted_number = np.argmax(prediccion_numero, axis=1)[0]  # Clase predicha
+        resultat1.append(str(predicted_number))
+   for i, contorn in enumerate(lletres):
         x, y, w, h = cv2.boundingRect(contorn)
         lletra = matricula[y:y+h, x:x+w]
-        plt.imshow(cv2.cvtColor(lletra, cv2.COLOR_BGR2RGB))
-        plt.title(f'Lletra {i+1}')
-        plt.axis('off')
-        plt.show()
         cv2.imwrite('templl.jpg', lletra)
-        #l=predict_letter('temp.jpg', model)
         img = tf.keras.preprocessing.image.load_img('templl.jpg', target_size=(128, 64))
         img_array = tf.keras.preprocessing.image.img_to_array(img)
-        img_array = tf.expand_dims(img_array, 0)  
-        predictions = model_ll.predict(img_array)
-        predicted_letter = tf.argmax(predictions[0]).numpy() 
-        ll=['B','C','D','F','G','H','J','K','L','M','N','P','R','S','T','V','W','X','Y','Z']
-        resultat.append(ll[predicted_letter])
-    print(f"El resultat és: {''.join(resultat)}")
-    return resultat
-
-
-def llegir_matricula_conjunt(contorns)
-    resultat=[]
-    return resultat
+        img_array = np.expand_dims(img_array, axis=0)
+        prediccion_lletra = model_ll.predict(img_array)
+        predicted_letter = np.argmax(prediccion_lletra, axis=1)[0]  # Clase predicha
+        classes = ['B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'V', 'W', 'X', 'Y', 'Z']
+        resultat1.append(str(classes[predicted_letter]))       
+    for i, contorn in enumerate(contorns):
+        x, y, w, h = cv2.boundingRect(contorn)
+        lletra = matricula[y:y+h, x:x+w]
+        #plt.imshow(cv2.cvtColor(lletra, cv2.COLOR_BGR2RGB))
+        # plt.title(f'Lletra {i+1}')
+        # plt.axis('off')
+        # plt.show()
+        cv2.imwrite('templl.jpg', lletra)
+        img = tf.keras.preprocessing.image.load_img('templl.jpg', target_size=(128, 64))
+        img_array = tf.keras.preprocessing.image.img_to_array(img)
+        img_array = np.expand_dims(img_array, axis=0)
+        predictions = model.predict(img_array)
+        predicted_letter = tf.argmax(predictions[0]).numpy()
+        ll=['0','1','2','3','4','5','6','7','8','9','B','C','D','F','G','H','J','K','L','M','N','P','R','S','T','V','W','X','Y','Z']
+        resultat2.append(str(ll[predicted_letter]))  
+    return resultat1, resultat2
 
 
 def matriu_confusio(real, pred, titol):
@@ -156,14 +153,6 @@ def matriu_confusio(real, pred, titol):
 model_ll = load_model('model_CNN_lletres.h5')
 model_n = load_model('model_CNN_num.h5')
 model_general = load_model('model_CNN_general.h5')
-
-# model_ll = load_model('model_SVM_lletres.h5')
-# model_n = load_model('model_SVM_num.h5')
-# model_general = load_model('model_SVM_general.h5')
-
-# model_ll = load_model('model_KNN_lletres.h5')
-# model_n = load_model('model_KNN_num.h5')
-# model_general = load_model('model_KNN_general.h5')
 
 real_num = []
 real_lletres = []
@@ -187,8 +176,7 @@ for fitxer in os.listdir(path):
         contorn_matricula = retallar_contorn_matricula(imatge, contorns)
         matricula = retallar_matricula(imatge, contorn_matricula)
         matricula_segmentada = segmentar_matricula(matricula)
-        resultat_separat = llegir_matricula_separat(matricula_segmentada)
-        resultat_general = llegir_matricula_conjunt(matricula_segmentada)
+        resultat_separat, resultat_general = llegir_matricula_separat(matricula_segmentada, model_general, model_n, model_ll):)
         
         real_num.extend(resultat_separat[:4])
         real_lletres.extend(resultat_separat[-3:])
