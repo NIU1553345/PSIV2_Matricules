@@ -1,7 +1,7 @@
 import tensorflow as tf
 from tensorflow.keras import layers, models
 from tensorflow.keras.preprocessing import image_dataset_from_directory
-
+from tensorflow.keras.metrics import Precision
 
 # La carpeta ha de tenir 10 carpetes (0,1,2...9) amb imatges del número corresponent 
 data_dir = r'C:\Users\Usuario\OneDrive\Escriptori\UAB\4t\psiv\Naina'
