@@ -1,6 +1,7 @@
 import tensorflow as tf
 from tensorflow.keras import layers, models
 from tensorflow.keras.preprocessing import image_dataset_from_directory
+from tensorflow.keras.metrics import Precision
 
 # La carpeta ha de tenir 20 carpetes (B,C,D...Z) amb imatges de la lletra corresponent 
 data_dir = r'C:\Users\Usuario\OneDrive\Escriptori\UAB\4t\psiv\LLaina'
