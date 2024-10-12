@@ -6,6 +6,9 @@ import tensorflow as tf
 from tensorflow.keras import layers, models
 from tensorflow.keras.preprocessing import image_dataset_from_directory
 from sklearn.metrics import confusion_matrix
+import seaborn as sns
+from sklearn.metrics import confusion_matrix
+import os
 
 
 def imatge_binaritzada(imatge):
