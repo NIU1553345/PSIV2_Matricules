@@ -258,28 +258,15 @@ for fitxer in os.listdir(path):
         real_num.extend([num for num in caracters[:4]])
         real_lletres.extend([lletra for lletra in caracters[-3:]])
         real_general.extend([car for car in caracters])
-
         cnn_pred_num.extend(pred_cnn_parcial[:4])
         cnn_pred_lletres.extend(pred_cnn_parcial[-3:])
         cnn_pred_general.extend(pred_cnn_general)
-        matriu_confusio(real_num, cnn_pred_num, "Model CNN Números")
-        matriu_confusio(real_lletres, cnn_pred_lletres, "Model CNN Lletres")
-        matriu_confusio(real_general, cnn_pred_general, "Model CNN General")
-
         svm_pred_num.extend(pred_svm_parcial[:4])
         svm_pred_lletres.extend(pred_svm_parcial[-3:])
         svm_pred_general.extend(pred_svm_general)
-        matriu_confusio(real_num, svm_pred_num, "Model SVM Números")
-        matriu_confusio(real_lletres, svm_pred_lletres, "Model SVM Lletres")
-        matriu_confusio(real_general, svm_pred_general, "Model SVM General")
-
         knn_pred_num.extend(pred_knn_parcial[:4])
         knn_pred_lletres.extend(pred_knn_parcial[-3:])
         knn_pred_general.extend(pred_knn_general)
-        matriu_confusio(real_num, knn_pred_num, "Model KNN Números")
-        matriu_confusio(real_lletres, knn_pred_lletres, "Model KNN Lletres")
-        matriu_confusio(real_general, knn_pred_general, "Model KNN General")
-
 
         
         resultats = {
@@ -308,6 +295,15 @@ for fitxer in os.listdir(path):
         print("Predicciones guardadas en 'resultats_modelsprova.csv'")
 
 
+matriu_confusio(real_num, cnn_pred_num, "Model CNN Números")
+matriu_confusio(real_lletres, cnn_pred_lletres, "Model CNN Lletres")
+matriu_confusio(real_general, cnn_pred_general, "Model CNN General")
+matriu_confusio(real_num, svm_pred_num, "Model SVM Números")
+matriu_confusio(real_lletres, svm_pred_lletres, "Model SVM Lletres")
+matriu_confusio(real_general, svm_pred_general, "Model SVM General")
+matriu_confusio(real_num, knn_pred_num, "Model KNN Números")
+matriu_confusio(real_lletres, knn_pred_lletres, "Model KNN Lletres")
+matriu_confusio(real_general, knn_pred_general, "Model KNN General")
 
 
 
