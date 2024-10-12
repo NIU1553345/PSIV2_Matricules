@@ -184,8 +184,9 @@ for fitxer in os.listdir(path):
         real_num.extend(resultat_separat[:4])
         real_lletres.extend(resultat_separat[-3:])
         real_general.extend(resultat_general)
-        matriu_confusio(real_num, pred_num, "Model CNN Números")
-        matriu_confusio(real_lletres, pred_lletres, "Model CNN Lletres")
-        matriu_confusio(real_general, pred_general, "Model CNN General")
+        
+matriu_confusio(real_num, pred_num, "Model CNN Números")
+matriu_confusio(real_lletres, pred_lletres, "Model CNN Lletres")
+matriu_confusio(real_general, pred_general, "Model CNN General")
 
 
