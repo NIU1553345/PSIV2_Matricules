@@ -51,9 +51,8 @@ model.compile(optimizer='adam',
 history = model.fit(train_dataset, validation_data=val_dataset, epochs=10)
 
 # Evaluar el model
-test_loss, test_acc = model.evaluate(val_dataset)
-print(f'Precisió en el conjunt de validació: {test_acc * 100:.2f}%')
+test_loss, test_precision = model.evaluate(val_dataset)
+print(f'Precisió en el conjunt de validació: {test_precision * 100:.2f}%')
 
-
-model.save('model_n7.h5')
+model.save('model_CNN_num.h5')
 
