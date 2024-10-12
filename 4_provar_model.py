@@ -94,7 +94,7 @@ def segmentar_matricula(matricula):
     return contorns
 
 
-def llegir_matricula(contorns):
+def llegir_matricula_separat(contorns):
     resultat=[]
     numeros=contorns[:4]
     lletres=contorns[-3:]
@@ -171,7 +171,7 @@ for fitxer in os.listdir(path):
         contorn_matricula = retallar_contorn_matricula(imatge, contorns)
         matricula = retallar_matricula(imatge, contorn_matricula)
         matricula_segmentada = segmentar_matricula(matricula)
-        resultat_separat = llegir_matricula(matricula_segmentada)
+        resultat_separat = llegir_matricula_separat(matricula_segmentada)
         resultat_general = 
         
         real_num.extend([num for num in resultat_separat[:4]])
