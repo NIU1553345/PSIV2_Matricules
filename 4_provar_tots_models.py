@@ -8,6 +8,8 @@ from tensorflow.keras import layers, models
 from tensorflow.keras.preprocessing import image_dataset_from_directory
 import os
 import joblib
+import seaborn as sns
+from sklearn.metrics import confusion_matrix
 
 
 def imatge_binaritzada(imatge):
