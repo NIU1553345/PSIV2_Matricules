@@ -86,7 +86,7 @@ def eliminar_soroll(imatge,contorns):
         if min_area < area < max_area and h>w and x + w < base_imatge - 10:
             contorn_filtrat.append(contorn)
             ll.append(l)
-            print(l)
+           
     
     if len(contorn_filtrat)>7:
         min1, min2 = sorted(ll)[:2]
@@ -253,8 +253,8 @@ model_llknn = joblib.load('knn_model_lletres.pkl')
 model_ncnn = load_model('model_n8.h5')
 model_nsvm = joblib.load('svm_model_n.pkl')
 model_nknn = joblib.load('knn_model_numeros.pkl')
-# carpeta=r"C:\Users\Usuario\Downloads\tallades"
-carpeta=r"C:\Users\Usuario\Downloads\prov"
+carpeta=r"C:\Users\Usuario\Downloads\tallades"
+# carpeta=r"C:\Users\Usuario\Downloads\prov"
 
 i=0
 for file in os.listdir(carpeta):
@@ -299,7 +299,7 @@ for file in os.listdir(carpeta):
         'KNN2models': [r['predicció'] for r in resultats['KNN2models']],
         'KNNmodelgeneral': [r['predicció'] for r in resultats['KNNmodelgeneral']],
     })
-    #Guardar els resultats a un csv
+    #Guardar els resultats en un csv
     if i==0:
         df_resultats.to_csv('resultats_modelsprova.csv', index=False)
     else:
@@ -307,5 +307,5 @@ for file in os.listdir(carpeta):
         df_resultats.to_csv('resultats_modelsprova.csv', mode='a', index=False, header=False)
     
     i+=1
-    print("Predicciones guardades a 'resultats_models.csv'")
+    print(f"Prediccions {i} guardads a 'resultats_models.csv'")
 print("final")
