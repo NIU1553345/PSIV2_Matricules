@@ -5,6 +5,7 @@ from tensorflow.keras.models import load_model
 import tensorflow as tf
 from tensorflow.keras import layers, models
 from tensorflow.keras.preprocessing import image_dataset_from_directory
+from sklearn.metrics import confusion_matrix
 
 
 def imatge_binaritzada(imatge):
@@ -136,6 +137,21 @@ def llegir_matricula_separat(contorns):
     return resultat
 
 
+def llegir_matricula_conjunt(contorns)
+    resultat=[]
+    return resultat
+
+
+def matriu_confusio(real, pred, titol):
+    matriu = confusion_matrix(real, pred)
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(matriu, annot=True, fmt='d', cmap='Blues', cbar=False)
+        plt.title(f"Matriu de confusió - {titol}")
+    plt.xlabel('Predició')
+    plt.ylabel('Real')
+    plt.show()
+
+
 #Hem provat per tots els models CNN, SVM i KNN
 model_ll = load_model('model_CNN_lletres.h5')
 model_n = load_model('model_CNN_num.h5')
@@ -172,7 +188,7 @@ for fitxer in os.listdir(path):
         matricula = retallar_matricula(imatge, contorn_matricula)
         matricula_segmentada = segmentar_matricula(matricula)
         resultat_separat = llegir_matricula_separat(matricula_segmentada)
-        resultat_general = 
+        resultat_general = llegir_matricula_conjunt(matricula_segmentada)
         
         real_num.extend([num for num in resultat_separat[:4]])
         real_lletres.extend([lletra for lletra in resultat_separat[-3:]])
