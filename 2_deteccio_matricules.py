@@ -1,7 +1,7 @@
-
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+
 
 def imatge_binaritzada(imatge):
     imatge = cv2.cvtColor(imatge, cv2.COLOR_BGR2GRAY)
@@ -11,6 +11,7 @@ def imatge_binaritzada(imatge):
     plt.show()
     return imatge_otsu
 
+
 def detectar_contorns(imatge_binaria):
     contornos, _ = cv2.findContours(imatge_binaria, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     imatge_contorns = cv2.cvtColor(imatge_binaria, cv2.COLOR_GRAY2BGR)
@@ -18,48 +19,43 @@ def detectar_contorns(imatge_binaria):
     plt.imshow(imatge_contorns)
     plt.title('Tots els contorns detectats')
     plt.show()
-    
     return contornos
+
 
 def retallar_contorn_matricula(imatge, contorns):
     contorn_matricula = None
-    max_area = 0
-    
+    max_area = 0 
     for contorn in contorns:
         x, y, w, h = cv2.boundingRect(contorn)
-        area = w * h
-        
+        area = w * h     
         # Proporció Amplada x Alçada per poder filtrar els contorns que no siguin rectangulars
-        aspect_ratio = float(w) / h
-        
+        aspect_ratio = float(w) / h     
         # Filtrar contorns que tinguin entre 2 i 6 de aspect ratio ( mides arbitraries ) i que tinguin l'area més gran	
         if 2 < aspect_ratio < 6 and area > max_area:
             contorn_matricula = contorn
-            max_area = area
-    
+            max_area = area    
     imatge_resultat = imatge.copy()
-    cv2.drawContours(imatge_resultat, [contorn_matricula], -1, (0, 255, 0), 2)
-    
+    cv2.drawContours(imatge_resultat, [contorn_matricula], -1, (0, 255, 0), 2)    
     plt.imshow(cv2.cvtColor(imatge_resultat, cv2.COLOR_BGR2RGB))
     plt.title('Contorn de la matrícula')
     plt.show()
-
     return contorn_matricula
+
 
 def retallar_matricula(imatge, contorn_matricula):
     x, y, w, h = cv2.boundingRect(contorn_matricula)
-    matricula = imatge[y:y+h, x:x+w]
-    
+    matricula = imatge[y:y+h, x:x+w]    
     plt.imshow(cv2.cvtColor(matricula, cv2.COLOR_BGR2RGB))
     plt.title('Matrícula')
-    plt.show()
-    
+    plt.show()  
     return matricula
+
 
 def calcular_lluminositat(img):
     hls_img = cv2.cvtColor(img, cv2.COLOR_BGR2HLS)
     lluminositat = np.mean(hls_img[:, :, 1])  # Canal L
     return lluminositat
+
 
 def eliminar_soroll(imatge,contorns):
     ll=[]
@@ -71,8 +67,7 @@ def eliminar_soroll(imatge,contorns):
         x, y, w, h = cv2.boundingRect(contorn)
         lletra = matricula[y:y+h, x:x+w]
         area = cv2.contourArea(contorn)
-        l=calcular_lluminositat(lletra)
-        
+        l=calcular_lluminositat(lletra)      
         if min_area < area < max_area and x > 20 and x + w < base_imatge - 20 and y > 20 and y + h < altura_imatge - 20 and h>w:
             contorn_filtrat.append(contorn)
             ll.append(l)
@@ -81,18 +76,16 @@ def eliminar_soroll(imatge,contorns):
       del contorn_filtrat[pos]
     return contorn_filtrat
 
+
 def segmentar_matricula(matricula):
     matricula_gris = cv2.cvtColor(matricula, cv2.COLOR_BGR2GRAY)
     _, matricula_binaria = cv2.threshold(matricula_gris, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     matricula_binaria = cv2.bitwise_not(matricula_binaria)
     contorns, _ = cv2.findContours(matricula_binaria, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    
     # Descarta els contorns menors de 400 píxels
     contorns = [contorn for contorn in contorns if cv2.contourArea(contorn) > 400]
-
     # Ordenar els contorns de esquerra a dreta
     contorns = sorted(contorns, key=lambda contorn: cv2.boundingRect(contorn)[0])
-    
     contorns= eliminar_soroll(matricula, contorns)
     # Crear una imatge per cada lletra o número
     for i, contorn in enumerate(contorns):
@@ -107,7 +100,6 @@ def segmentar_matricula(matricula):
         # cv2.destroyAllWindows()
 
     
-
 imatge = cv2.imread(r"C:\Users\Usuario\OneDrive\Escriptori\UAB\4t\psiv\matricules_tallades/PXL_20210921_095129495_tallada.jpg")
 plt.imshow(imatge)
 plt.title('a')
