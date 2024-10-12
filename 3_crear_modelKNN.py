@@ -4,6 +4,7 @@ import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_score, classification_report
 from tensorflow.keras.preprocessing import image
 import joblib
 
@@ -33,7 +34,7 @@ X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_st
 knn_model = KNeighborsClassifier(n_neighbors=3) 
 knn_model.fit(X_train, y_train)
 y_pred = knn_model.predict(X_val)
-accuracy = accuracy_score(y_val, y_pred)
-print(f'Precisió en el conjunt de validació: {accuracy * 100:.2f}%')
-joblib.dump(knn_model, 'knn_model_general.pkl')
+precision = precision_score(y_val, y_pred, average='weighted')
+print(f'Precisió en el conjunt de validació: {precision * 100:.2f}%')
+joblib.dump(knn_model, 'model_KNN_general.pkl')
 print("Model guardat amb èxit!")
