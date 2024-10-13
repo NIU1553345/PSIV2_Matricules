@@ -4,30 +4,34 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 import pandas as pd
 
  
-def matriu_confusio(df,model,valor_real,pred):
-    vr=list(df[valor_real].values)
-    prediccions=list(df[pred].values)
+def matriu_confusio(df, model, valor_real, pred):
+    vr = list(df[valor_real].values)
+    prediccions = list(df[pred].values)
     y_true = []
     y_pred = []
+    
     for mat in vr:
         for valor in mat:
             y_true.append(valor)   
     for mat in prediccions:
         for valor in mat:
             y_pred.append(valor)    
+            
     labels = sorted(set(y_true + y_pred))    
-    cm = confusion_matrix(y_true, y_pred, labels=labels)    
+    cm = confusion_matrix(y_true, y_pred, labels=labels) 
+    cm_normalized = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis] 
     plt.figure(figsize=(12, 12))  
-    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=labels)    
-    disp.plot(cmap=plt.cm.Blues, values_format='d', ax=plt.gca())    
-    plt.title(f"Matriu de Confusió {model}", fontsize=16)
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm_normalized, display_labels=labels)    
+    disp.plot(cmap=plt.cm.Blues, ax=plt.gca(),  values_format=None) 
+    plt.title(f"Matriu de Confusió Normalitzada {model}", fontsize=16)
     plt.xlabel("Predicció", fontsize=14)
     plt.ylabel("Real", fontsize=14)   
     plt.xticks(fontsize=12)  
     plt.yticks(fontsize=12) 
     plt.grid(False)      
-    plt.savefig(f"C:\\Users\\Usuario\\Downloads\\mc\\matriu_confusio_{model}.png", bbox_inches='tight')    
+    plt.savefig(f"C:\\Users\\Usuario\\Downloads\\mc\\matriu_confusio_normalitzada_{model}.png", bbox_inches='tight')    
     plt.show()
+    
     
 
 def metriques(real, pred):
