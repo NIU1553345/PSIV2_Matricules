@@ -1,4 +1,3 @@
-
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
@@ -10,46 +9,31 @@ def matriu_confusio(df,model,valor_real,pred):
     prediccions=list(df[pred].values)
     y_true = []
     y_pred = []
-    
     for mat in vr:
         for valor in mat:
-            y_true.append(valor)
-    
+            y_true.append(valor)   
     for mat in prediccions:
         for valor in mat:
-            y_pred.append(valor)
-    
-    labels = sorted(set(y_true + y_pred))
-    
-    cm = confusion_matrix(y_true, y_pred, labels=labels)
-    
+            y_pred.append(valor)    
+    labels = sorted(set(y_true + y_pred))    
+    cm = confusion_matrix(y_true, y_pred, labels=labels)    
     plt.figure(figsize=(12, 12))  
-    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=labels)
-    
-    disp.plot(cmap=plt.cm.Blues, values_format='d', ax=plt.gca())
-    
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=labels)    
+    disp.plot(cmap=plt.cm.Blues, values_format='d', ax=plt.gca())    
     plt.title(f"Matriu de Confusió {model}", fontsize=16)
     plt.xlabel("Predicció", fontsize=14)
-    plt.ylabel("Real", fontsize=14)
-    
+    plt.ylabel("Real", fontsize=14)   
     plt.xticks(fontsize=12)  
     plt.yticks(fontsize=12) 
-    plt.grid(False)  
-    
-    plt.savefig(f"C:\\Users\\Usuario\\Downloads\\mc\\matriu_confusio_{model}.png", bbox_inches='tight')
-    
+    plt.grid(False)      
+    plt.savefig(f"C:\\Users\\Usuario\\Downloads\\mc\\matriu_confusio_{model}.png", bbox_inches='tight')    
     plt.show()
     
 
-
 file_path = r"C:\Users\Usuario\OneDrive\Escriptori\UAB\4t\psiv\modelsresultats.csv"
-
 df = pd.read_csv(file_path)
-
 columnes = df.columns.tolist()
 valor_real=columnes[0]
 models=columnes[1:]
-
-
 for model in models:
     matriu_confusio(df,model,valor_real,model)
