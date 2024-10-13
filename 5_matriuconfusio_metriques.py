@@ -30,10 +30,37 @@ def matriu_confusio(df,model,valor_real,pred):
     plt.show()
     
 
-file_path = r"C:\Users\Usuario\OneDrive\Escriptori\UAB\4t\psiv\modelsresultats.csv"
+def metriques(real, pred):
+    hit = 0
+    miss = 0
+    for i in range(len(real)):
+        if real[i] == pred[i]: 
+            hit += 1
+        else:
+            miss += 1 
+    hit_rate = hit / len(real)
+    miss_rate = miss / len(real)
+
+    real = [char for matricula in real for char in matricula]
+    pred = [char for matricula in pred for char in matricula]
+    total = len(real)
+    correctes = sum(1 for r, p in zip(real, pred) if r == p)
+    precisio = correctes / total if total > 0 else 0
+
+    print(f"Hits: {hit}")
+    print(f"Misses: {miss}")
+    print(f"Hit Percentatge: {hit_rate * 100:.2f}%")
+    print(f"Miss Percentatge: {miss_rate * 100:.2f}%")
+    print(f"Precisió: {precisio:.2f}")
+
+
+file_path = '/Users/aina/Desktop/uni/4rt/psiv/repte1/resultatsfinal.csv'
 df = pd.read_csv(file_path)
 columnes = df.columns.tolist()
 valor_real=columnes[0]
 models=columnes[1:]
 for model in models:
-    matriu_confusio(df,model,valor_real,model)
+    print(f"\nModel: {model}")
+    matriu_confusio(df, model, valor_real, model)
+    metriques(df[valor_real].tolist(), df[model].tolist())
+
