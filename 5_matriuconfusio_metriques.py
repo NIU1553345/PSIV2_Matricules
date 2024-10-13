@@ -16,10 +16,15 @@ def matriu_confusio(df, model, valor_real, pred):
     for mat in prediccions:
         for valor in mat:
             y_pred.append(valor)    
-            
     labels = sorted(set(y_true + y_pred))    
     cm = confusion_matrix(y_true, y_pred, labels=labels) 
-    cm_normalized = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis] 
+    row_sums = cm.sum(axis=1)[:, np.newaxis] 
+    cm_normalized = np.zeros_like(cm, dtype=float) 
+    for i in range(cm.shape[0]):
+        if row_sums[i] > 0:
+            cm_normalized[i] = cm[i] / row_sums[i]  
+        else:
+            cm_normalized[i] = 0  
     cm_normalized = np.round(cm_normalized, 1)
     plt.figure(figsize=(12, 12))  
     disp = ConfusionMatrixDisplay(confusion_matrix=cm_normalized, display_labels=labels)    
@@ -30,9 +35,8 @@ def matriu_confusio(df, model, valor_real, pred):
     plt.xticks(fontsize=12)  
     plt.yticks(fontsize=12) 
     plt.grid(False)      
-    plt.savefig(f"C:\\Users\\Usuario\\Downloads\\mc\\matriu_confusio_normalitzada_{model}.png", bbox_inches='tight')    
+    plt.savefig(f'/Users/aina/Desktop/uni/4rt/psiv/repte1/matrius de confusio/matriu_confusio_normalitzada_{model}.png', bbox_inches='tight')    
     plt.show()
-    
     
 
 def metriques(real, pred):
@@ -59,7 +63,7 @@ def metriques(real, pred):
     print(f"Precisió: {precisio:.2f}")
 
 
-file_path = '/Users/aina/Desktop/uni/4rt/psiv/repte1/resultatsfinal.csv'
+file_path = '/Users/aina/Desktop/uni/4rt/psiv/repte1/resultatsmodels.csv'
 df = pd.read_csv(file_path)
 columnes = df.columns.tolist()
 valor_real=columnes[0]
@@ -68,4 +72,5 @@ for model in models:
     print(f"\nModel: {model}")
     matriu_confusio(df, model, valor_real, model)
     metriques(df[valor_real].tolist(), df[model].tolist())
+
 
