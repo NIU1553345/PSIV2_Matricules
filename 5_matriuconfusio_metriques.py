@@ -20,6 +20,7 @@ def matriu_confusio(df, model, valor_real, pred):
     labels = sorted(set(y_true + y_pred))    
     cm = confusion_matrix(y_true, y_pred, labels=labels) 
     cm_normalized = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis] 
+    cm_normalized = np.round(cm_normalized, 1)
     plt.figure(figsize=(12, 12))  
     disp = ConfusionMatrixDisplay(confusion_matrix=cm_normalized, display_labels=labels)    
     disp.plot(cmap=plt.cm.Blues, ax=plt.gca(),  values_format=None) 
